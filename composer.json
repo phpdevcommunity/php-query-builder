@@ -14,5 +14,10 @@
             "DevCoder\\": "src"
         }
     },
-    "require": {}
+    "require": {
+        "php": ">=7.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.1"
+    }
 }

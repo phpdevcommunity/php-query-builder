@@ -20,14 +20,25 @@ class QueryBuilder
     /**
      * @var array<string>
      */
+    private $order;
+
+    /**
+     * @var array<string>
+     */
     private $from = [];
+
+    /**
+     * @var int
+     */
+    private $limit;
 
     public function __toString(): string
     {
-        $where = $this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions);
         return 'SELECT ' . implode(', ', $this->fields)
-            . ' FROM ' . implode(', ', $this->from)
-            . $where;
+        . ' FROM ' . implode(', ', $this->from)
+        . $this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions)
+        . $this->order === [] ? '' : ' ORDER BY ' . implode(', ', $this->order)
+        . $this->limit === null ? '' : ' LIMIT ' . $this->limit;
     }
 
     public function select(string ...$select): self
@@ -46,10 +57,20 @@ class QueryBuilder
 
     public function from(string $table, ?string $alias = null): self
     {
-        if ($alias === null) {
-            $this->from[] = $table;
-        } else {
-            $this->from[] = "${table} AS ${alias}";
+        $this->from[] = $alias === null ? $table : "${table} AS ${alias}";
+        return $this;
+    }
+
+    public function limit(int $limit): self
+    {
+        $this->limit = $limit;
+        return $this;
+    }
+
+    public function orderBy(string ...$order): self
+    {
+        foreach ($order as $arg) {
+            $this->order[] = $arg;
         }
         return $this;
     }
