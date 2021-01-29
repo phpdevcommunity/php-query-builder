@@ -20,7 +20,7 @@ class QueryBuilder
     /**
      * @var array<string>
      */
-    private $order;
+    private $order = [];
 
     /**
      * @var array<string>
@@ -28,7 +28,7 @@ class QueryBuilder
     private $from = [];
 
     /**
-     * @var int
+     * @var int|null
      */
     private $limit;
 
@@ -36,9 +36,9 @@ class QueryBuilder
     {
         return 'SELECT ' . implode(', ', $this->fields)
         . ' FROM ' . implode(', ', $this->from)
-        . $this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions)
-        . $this->order === [] ? '' : ' ORDER BY ' . implode(', ', $this->order)
-        . $this->limit === null ? '' : ' LIMIT ' . $this->limit;
+        . ($this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions))
+        . ($this->order === [] ? '' : ' ORDER BY ' . implode(', ', $this->order))
+        . ($this->limit === null ? '' : ' LIMIT ' . $this->limit);
     }
 
     public function select(string ...$select): self
