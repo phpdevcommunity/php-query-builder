@@ -1,6 +1,5 @@
 <?php
 
-
 namespace DevCoder;
 
 use DevCoder\Interfaces\QueryInterface;
