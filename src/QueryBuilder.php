@@ -7,71 +7,18 @@ namespace DevCoder;
  */
 class QueryBuilder
 {
-    /**
-     * @var array<string>
-     */
-    private $fields = [];
-
-    /**
-     * @var array<string>
-     */
-    private $conditions = [];
-
-    /**
-     * @var array<string>
-     */
-    private $order = [];
-
-    /**
-     * @var array<string>
-     */
-    private $from = [];
-
-    /**
-     * @var int|null
-     */
-    private $limit;
-
-    public function __toString(): string
+    public function select(string ...$select): Select
     {
-        return 'SELECT ' . implode(', ', $this->fields)
-        . ' FROM ' . implode(', ', $this->from)
-        . ($this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions))
-        . ($this->order === [] ? '' : ' ORDER BY ' . implode(', ', $this->order))
-        . ($this->limit === null ? '' : ' LIMIT ' . $this->limit);
+        return new Select($select);
     }
 
-    public function select(string ...$select): self
+    public function insert(string $into): Insert
     {
-        $this->fields = $select;
-        return $this;
+        return new Insert($into);
     }
 
-    public function where(string ...$where): self
+    public function update(string $table): Update
     {
-        foreach ($where as $arg) {
-            $this->conditions[] = $arg;
-        }
-        return $this;
-    }
-
-    public function from(string $table, ?string $alias = null): self
-    {
-        $this->from[] = $alias === null ? $table : "${table} AS ${alias}";
-        return $this;
-    }
-
-    public function limit(int $limit): self
-    {
-        $this->limit = $limit;
-        return $this;
-    }
-
-    public function orderBy(string ...$order): self
-    {
-        foreach ($order as $arg) {
-            $this->order[] = $arg;
-        }
-        return $this;
+        return new Update($table);
     }
 }
