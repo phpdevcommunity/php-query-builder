@@ -21,4 +21,9 @@ class QueryBuilder
     {
         return new Update($table);
     }
+
+    public static function delete(string $table): Delete
+    {
+        return new Delete($table);
+    }
 }
