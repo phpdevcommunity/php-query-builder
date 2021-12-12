@@ -3,7 +3,10 @@
 namespace DevCoder;
 
 /**
- * Class QueryBuilder
+ * @package	php-query-builder
+ * @author	Devcoder.xyz <dev@devcoder.xyz>
+ * @license	https://opensource.org/licenses/MIT	MIT License
+ * @link	https://www.devcoder.xyz
  */
 class QueryBuilder
 {

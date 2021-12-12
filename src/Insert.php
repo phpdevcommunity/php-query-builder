@@ -4,17 +4,18 @@ namespace DevCoder;
 
 use DevCoder\Interfaces\QueryInterface;
 
+/**
+ * @package	php-query-builder
+ * @author	Devcoder.xyz <dev@devcoder.xyz>
+ * @license	https://opensource.org/licenses/MIT	MIT License
+ * @link	https://www.devcoder.xyz
+ */
 class Insert implements QueryInterface
 {
     /**
      * @var string
      */
     private $table;
-
-    /**
-     * @var array<string>
-     */
-    private $columns = [];
 
     /**
      * @var array<string>
@@ -29,15 +30,12 @@ class Insert implements QueryInterface
     public function __toString(): string
     {
         return 'INSERT INTO ' . $this->table
-            . ' (' . implode(', ',$this->columns) . ') VALUES (' . implode(', ',$this->values) . ')';
+            . ' (' . implode(', ',array_keys($this->values)) . ') VALUES (' . implode(', ',$this->values) . ')';
     }
 
-    public function columns(string ...$columns): self
+    public function setValue(string $column, string $value): self
     {
-        $this->columns = $columns;
-        foreach ($columns as $column) {
-            $this->values[] = ":$column";
-        }
+        $this->values[$column] = $value;
         return $this;
     }
 }

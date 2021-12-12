@@ -4,6 +4,12 @@ namespace DevCoder;
 
 use DevCoder\Interfaces\QueryInterface;
 
+/**
+ * @package	php-query-builder
+ * @author	Devcoder.xyz <dev@devcoder.xyz>
+ * @license	https://opensource.org/licenses/MIT	MIT License
+ * @link	https://www.devcoder.xyz
+ */
 class Select implements QueryInterface
 {
     /**
@@ -29,17 +35,27 @@ class Select implements QueryInterface
     /**
      * @var array<string>
      */
-    private $innerJoin = [];
+    private $groupBy = [];
 
     /**
      * @var array<string>
      */
-    private $leftJoin = [];
+    private $having = [];
 
     /**
      * @var int|null
      */
     private $limit;
+
+    /**
+     * @var bool
+     */
+    private $distinct = false;
+
+    /**
+     * @var array
+     */
+    private $join = [];
 
     public function __construct(array $select)
     {
@@ -56,13 +72,14 @@ class Select implements QueryInterface
 
     public function __toString(): string
     {
-        return 'SELECT ' . implode(', ', $this->fields)
+        return trim('SELECT ' . ($this->distinct === true ? 'DISTINCT ' : '') . implode(', ', $this->fields)
             . ' FROM ' . implode(', ', $this->from)
-            . ($this->leftJoin === [] ? '' : ' LEFT JOIN '. implode(' LEFT JOIN ', $this->leftJoin))
-            . ($this->innerJoin === [] ? '' : ' INNER JOIN '. implode(' INNER JOIN ', $this->innerJoin))
+            . ($this->join === [] ? '' :  implode(' ', $this->join))
             . ($this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions))
+            . ($this->groupBy === [] ? '' : ' GROUP BY ' . implode(', ', $this->groupBy))
+            . ($this->having === [] ? '' : ' HAVING ' . implode(' AND ', $this->having))
             . ($this->order === [] ? '' : ' ORDER BY ' . implode(', ', $this->order))
-            . ($this->limit === null ? '' : ' LIMIT ' . $this->limit);
+            . ($this->limit === null ? '' : ' LIMIT ' . $this->limit));
     }
 
     public function where(string ...$where): self
@@ -85,28 +102,54 @@ class Select implements QueryInterface
         return $this;
     }
 
-    public function orderBy(string ...$order): self
+    public function orderBy(string $sort, string $order = 'ASC'): self
     {
-        foreach ($order as $arg) {
-            $this->order[] = $arg;
-        }
+        $this->order[] = "$sort $order";
         return $this;
     }
 
     public function innerJoin(string ...$join): self
     {
-        $this->leftJoin = [];
         foreach ($join as $arg) {
-            $this->innerJoin[] = $arg;
+            $this->join[] = "INNER JOIN $arg";
         }
         return $this;
     }
 
     public function leftJoin(string ...$join): self
     {
-        $this->innerJoin = [];
         foreach ($join as $arg) {
-            $this->leftJoin[] = $arg;
+            $this->join[] = "LEFT JOIN $arg";
+        }
+        return $this;
+    }
+
+    public function rightJoin(string ...$join): self
+    {
+        foreach ($join as $arg) {
+            $this->join[] = "RIGHT JOIN $arg";
+        }
+        return $this;
+    }
+
+    public function distinct(): self
+    {
+        $this->distinct = true;
+        return $this;
+    }
+
+    public function groupBy(string ...$groupBy): self
+    {
+        foreach ($groupBy as $arg) {
+            $this->groupBy[] = $arg;
+        }
+        return $this;
+    }
+
+    public function having(string ...$having): self
+    {
+        foreach ($having as $arg) {
+            $this->having[] = $arg;
         }
         return $this;
     }

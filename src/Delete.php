@@ -4,6 +4,12 @@ namespace DevCoder;
 
 use DevCoder\Interfaces\QueryInterface;
 
+/**
+ * @package	php-query-builder
+ * @author	Devcoder.xyz <dev@devcoder.xyz>
+ * @license	https://opensource.org/licenses/MIT	MIT License
+ * @link	https://www.devcoder.xyz
+ */
 class Delete implements QueryInterface
 {
     /**
@@ -16,9 +22,9 @@ class Delete implements QueryInterface
      */
     private $conditions = [];
 
-    public function __construct(string $table)
+    public function __construct(string $table, ?string $alias = null)
     {
-        $this->table = $table;
+        $this->table = $alias === null ? $table : "${table} AS ${alias}";;
     }
 
     public function __toString(): string

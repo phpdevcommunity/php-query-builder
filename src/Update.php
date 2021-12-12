@@ -4,6 +4,12 @@ namespace DevCoder;
 
 use DevCoder\Interfaces\QueryInterface;
 
+/**
+ * @package	php-query-builder
+ * @author	Devcoder.xyz <dev@devcoder.xyz>
+ * @license	https://opensource.org/licenses/MIT	MIT License
+ * @link	https://www.devcoder.xyz
+ */
 class Update implements QueryInterface
 {
     /**
@@ -21,9 +27,9 @@ class Update implements QueryInterface
      */
     private $columns = [];
 
-    public function __construct(string $table)
+    public function __construct(string $table, ?string $alias = null)
     {
-        $this->table = $table;
+        $this->table = $alias === null ? $table : "${table} AS ${alias}";;
     }
 
     public function __toString(): string
@@ -41,11 +47,9 @@ class Update implements QueryInterface
         return $this;
     }
 
-    public function set(string ...$columns): self
+    public function set(string $key, string $value): self
     {
-        foreach ($columns as $column) {
-            $this->columns[] = "$column = :$column";
-        }
+        $this->columns[] = $key . ' = ' . $value;
         return $this;
     }
 }
