@@ -1,23 +1,24 @@
 {
-    "name": "devcoder-xyz/php-query-builder",
-    "description": "a simple php query builder",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Fad M.R",
-            "email": "fadymichel@devcoder.xyz"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "DevCoder\\": "src"
-        }
-    },
-    "require": {
-        "php": ">=7.3"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^8.1"
+  "name": "devcoder-xyz/php-query-builder",
+  "description": "A lightweight PHP query builder for easy database interactions",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "F.Michel",
+      "email": "dev@devcoder.xyz"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "DevCoder\\SqlBuilder\\": "src",
+      "Test\\DevCoder\\SqlBuilder\\": "tests"
+    }
+  },
+  "require": {
+    "php": ">=7.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6"
+  }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace DevCoder\Interfaces;
+namespace DevCoder\SqlBuilder\Interfaces;
 
 /**
  * @package	php-query-builder
